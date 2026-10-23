@@ -24,7 +24,7 @@ Before any claim of success:
 | Tests pass | Fresh test run: 0 failures, exit 0 | An earlier run; "the change is small" |
 | Build or typecheck succeeds | The build or typecheck command: exit 0 | Lint passing; the editor shows no errors |
 | Bug is fixed | The original reproduction now passes | The code changed; a different test passes |
-| Regression test works | You saw it fail without the fix (stash or comment out only the fix, then restore it) and pass with it | It passes once |
+| Regression test works | You saw it fail with only the fix reverted (comment out or undo just the fix lines, then restore them) and pass with it | It passes once |
 | Feature works | Ran it the way a user would: the UI, the endpoint, the CLI | Unit tests alone, for a user-visible feature |
 | Subagent or tool finished the job | The diff, files or output it produced, checked by you | Its own success message |
 | Requirements met | Each requirement checked off, line by line | Tests passing |

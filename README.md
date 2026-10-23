@@ -45,7 +45,7 @@ These skills cover the same ground as some skills in those sets, so with both in
 | Code Better | Superpowers | Matt Pocock |
 |---|---|---|
 | lean-coding | — | — |
-| clarify-first | brainstorming | grilling, grill-me |
+| clarify-first | brainstorming | grilling, grill-me, grill-with-docs |
 | test-first | test-driven-development | tdd |
 | feedback-loop-debugging | systematic-debugging | diagnosing-bugs |
 | evidence-before-done | verification-before-completion | — |
@@ -63,7 +63,7 @@ Worth installing as well, from their own repos: Superpowers' `writing-skills` an
 
 ## How these were made and checked
 
-Each skill came out of a side-by-side analysis of the source repos. A separate reviewer agent (Claude Opus 5.5) then reviewed each skill for trigger accuracy, overlap, correctness, portability, size and credit, and its findings were fixed. A final reviewer then checked the whole repo. `python scripts/validate.py` runs the structural checks, and [evals/trigger-cases.json](evals/trigger-cases.json) lists the prompts each skill should and should not load on.
+Each skill came out of a side-by-side analysis of the source repos. A separate reviewer agent (Claude Opus 5.5) then reviewed each skill for trigger accuracy, overlap, correctness, portability, size and credit, and its findings were fixed or, in one case, deliberately kept short (see the PR description). A final reviewer then checked the whole repo. `python scripts/validate.py` runs the structural checks, and [evals/trigger-cases.json](evals/trigger-cases.json) lists the prompts each skill should and should not load on.
 
 ## Contributing
 

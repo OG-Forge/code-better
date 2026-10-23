@@ -2,10 +2,13 @@
 
 Usage: python scripts/trigger_test.py [skill ...]
 Needs the `claude` CLI on PATH and spends tokens (one short session per prompt).
-Prompts written in parentheses describe a moment, not a user message, and are skipped.
+Prompts written in parentheses describe a moment, not a user message, and are skipped, as are slash
+commands (they expand as a prompt, not a Skill call). Disable other skill plugins first: results reflect
+every plugin that is enabled.
 """
 import json
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -17,7 +20,7 @@ SKILL_CALL = re.compile(r'"name":"Skill","input":\{"skill":"([^"]+)"')
 
 def skills_loaded(prompt, workdir):
     out = subprocess.run(
-        ["claude", "-p", "--plugin-dir", str(ROOT), "--max-turns", "2",
+        [shutil.which("claude") or "claude", "-p", "--plugin-dir", str(ROOT), "--max-turns", "2",
          "--output-format", "stream-json", "--verbose", prompt],
         cwd=workdir, capture_output=True, text=True, encoding="utf-8", timeout=300,
     ).stdout
@@ -32,7 +35,7 @@ def main():
         for skill in wanted:
             for kind in ("should", "should_not"):
                 for prompt in cases[skill][kind]:
-                    if prompt.startswith("("):
+                    if prompt.startswith(("(", "/")):
                         continue
                     loaded = skills_loaded(prompt, workdir)
                     hit = f"code-better:{skill}" in loaded

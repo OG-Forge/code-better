@@ -18,3 +18,5 @@ claude -p --plugin-dir /path/to/code-better --max-turns 2 --output-format stream
 ```
 
 A `should` prompt passes when its skill loads. A `should_not` prompt passes when that skill stays quiet.
+
+To run every case: `python scripts/trigger_test.py [skill ...]`. It starts one short headless session per prompt, so it spends tokens. Disable other skill plugins first (for example Superpowers), because every enabled plugin competes for the same prompts.

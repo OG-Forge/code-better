@@ -20,7 +20,7 @@ Agree on each of these and write them into `metric-loop.md` in the repo root (or
 
 Then prepare git:
 
-- Run `git status --porcelain`. If anything is modified or staged, ask the user to commit or stash it. Never stash or discard their work yourself.
+- Run `git status --porcelain`. If anything is modified, staged, or untracked inside the editable surface, ask the user to commit, stash or move it. Never stash, move or discard their work yourself.
 - Create a fresh branch `metric-loop/<tag>` (it must not already exist). The main branch is never touched.
 - Add `results.tsv`, `run.log` and `metric-loop.md` to `.git/info/exclude` so they are never committed and never touched by a reset.
 
@@ -36,7 +36,7 @@ repeat until the budget runs out or the user stops it:
   4. run the measurement with all output redirected to run.log (never stream it into context)
   5. read only the metric lines from run.log (grep); if they are missing, read the last ~50 lines for the error
   6. run the guardrail commands
-  7. `git diff --name-only <last kept SHA>..HEAD` lists only editable-surface paths?
+  7. `git status --porcelain --untracked-files=no` is empty and `git diff --name-only <last kept SHA>..HEAD` lists only editable-surface paths?
   8. beats the reference by more than the noise? re-run twice more and keep it only if the median of the 3 still wins.
      kept → its median becomes the new reference
      otherwise, or any check in 6-7 failed → `git reset --hard <SHA of the last keep row in results.tsv>`

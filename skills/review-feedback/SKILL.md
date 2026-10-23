@@ -11,7 +11,7 @@ Review comments are claims to check, not orders to obey or praise to return. Ver
 
 1. **Read** all of the feedback before changing anything.
 2. **Restate** each item as a concrete technical change in your own words. If you cannot, it is unclear.
-3. **Clarify first.** If any item is unclear, ask the person who gave the feedback about every unclear item before implementing any of them. Items are often related, and partial understanding produces the wrong fix.
+3. **Clarify first.** If any item is unclear, ask the person who gave the feedback about every unclear item before implementing any of them. Items are often related, and partial understanding produces the wrong fix. (Reviewer subagent during a plan you are carrying out: see below.)
 4. **Verify** each item against the code: is the problem real here? Would the suggestion break something? Is there a reason for the current code (a comment, a commit message, a test, an ADR)? Does it hold on every platform and version this code supports?
 5. **Decide** per item: do it, do it differently (say how and why), or push back (say why, with evidence: a test, a caller, a constraint). If an item contradicts a decision the user made (in the plan, the spec or this conversation), don't implement it: raise it with the user.
 6. **Implement** one item at a time, running the relevant tests after each, in this order: blocking issues, then simple fixes, then complex ones.
@@ -31,7 +31,7 @@ Review comments are claims to check, not orders to obey or praise to return. Ver
 - When you push back, be specific: "Keeping the retry: `sync.ts:88` relies on it when the API returns 503; removing it fails `sync.test.ts:'retries on 503'`."
 - When you can't verify a claim, say so and ask: "I can't reproduce this without production data. Should I add a guard anyway?"
 - If you pushed back and turn out to be wrong, say so plainly and fix it.
-- On GitHub, answer an inline review comment in its thread: `gh api -X POST repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies -f body='...'`, where `{id}` is the thread's first comment. Answer conversation comments and review summaries with one PR comment that quotes each point.
+- On GitHub, draft the replies and post them only when the user asks or agrees. Answer an inline review comment in its thread: `gh api -X POST repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies -f body='...'`, where `{id}` is the thread's first comment. Answer conversation comments and review summaries with one PR comment that quotes each point.
 
 ## Red flags
 
