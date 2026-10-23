@@ -13,7 +13,7 @@ The skills in this repository are adaptations: the text has been rewritten, merg
 | review-feedback | superpowers `receiving-code-review` |
 | build-plan | superpowers `writing-plans`, `executing-plans`, `subagent-driven-development`; andrej-karpathy-skills |
 | session-handoff | mattpocock/skills `handoff`, `ask-matt` (phase boundaries) |
-| session-retro | mattpocock/skills `retro` |
+| session-retro | mattpocock/skills `retro`; superpowers `diagnosing-superpowers` (log-reading safety) |
 | metric-loop | karpathy/autoresearch `program.md` |
 | keepwarm | original (Ojas Goel) |
 

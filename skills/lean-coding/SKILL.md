@@ -5,15 +5,15 @@ description: Use when writing, changing, fixing or refactoring code in any langu
 
 # Lean coding
 
-Solve the whole task with the least new code, touch only what the task needs, and prove it works. Small because it is necessary, not because it is golfed. Lazy about the solution, never about reading.
+Solve the whole task with the least new code, touch only what the task needs, and prove it works. Small because it is necessary, not because it is golfed. Lazy about the solution, never about reading or finishing: update every caller, test and fixture your change breaks.
 
 ## 1. Understand before you write
 
 - Read the task and the code it touches. Trace the real flow: where data comes in, what is stored, what goes out.
 - List every place the change must reach: callers, tests, fixtures, config, exports, docs. That is the scope. Features nobody asked for are not.
 - Check what the change could break for users: data it could destroy or expose, callers that would stop working.
-- When the request has more than one reasonable reading, or you are making an assumption that changes what gets built, say so in one line and ask, or pick one and state it. Silent guesses are the failure to avoid.
-- When a simpler approach than the one requested exists, say so before building.
+- If an open choice changes what gets built (scope, data, behaviour), use `clarify-first`. For small, low-stakes ambiguity, pick the likelier reading and state it in one line. Never guess silently.
+- When a simpler approach than the one requested exists, say so in one line, then build what was asked unless the user switches.
 
 ## 2. Take the first rung that fully works
 
@@ -29,9 +29,10 @@ Solve the whole task with the least new code, touch only what the task needs, an
 - Every changed line traces to the request. Match the existing style, structure, layers and naming, even where you would do it differently.
 - Leave adjacent code, comments and formatting as they are. Mention unrelated problems or dead code in your reply instead of fixing them.
 - Clean up only your own mess: remove imports, variables and functions that your change made unused.
-- Bug fix: before editing, search for every caller of the function you touch, then fix the root cause once, in the shared code.
+- Bug fix: reproduce it first (see `feedback-loop-debugging`), search for every caller of the function you touch, then fix the root cause once, in the shared code.
 - Code you move or merge keeps its validation and error handling.
 - Between two options of equal size, pick the one that is correct on edge cases.
+- No error handling for cases that cannot happen, and no wrappers or type conversions the platform doesn't need. Keep values in the form the platform gives you. Deletion beats addition.
 - Comments explain only the why that the code cannot show, in one line.
 - A deliberate shortcut with a known limit gets a comment: `shortcut: <the limit>, <when to upgrade>`.
 
@@ -41,10 +42,9 @@ Validation at trust boundaries, error handling that prevents data loss, security
 
 ## 5. Define done, then check it
 
-- Turn the task into a check: "add validation" becomes "tests for invalid input pass"; "fix the bug" becomes "a test that reproduced it now passes"; "refactor X" becomes "the same tests pass before and after".
-- New non-trivial logic (a branch, a loop, a parser, money, security, a new script) leaves one small test or an assert-based self-check behind. Trivial changes need none.
-- For multi-step work, state a short plan first: `1. <step> → verify: <check>`.
-- Run the checks before saying it works (see `evidence-before-done`).
+- Turn the task into a check you can watch fail first: "fix the bug" → a test that reproduces it fails, then passes; "add validation" → tests for invalid input fail, then pass; "refactor X" → the same tests pass before and after. How strict to be follows `test-first`, which governs when loaded; otherwise new non-trivial logic (a branch, a loop, a parser, money, security, a new script) still leaves one small test or an assert-based self-check. Trivial changes need none.
+- For multi-step work, state a short plan first (see `build-plan`).
+- Before saying it works, run the check that proves it, after your last edit, and show the command and the decisive output line (full rules: `evidence-before-done`).
 
 ## 6. Close every reply
 

@@ -11,26 +11,27 @@ Write the test, watch it fail for the right reason, write the least code that ma
 
 | The code | Rule |
 |---|---|
-| Money, security, auth, data writes or deletes, parsers, concurrency, bug fixes | Strict: no production code without a failing test first. Code written before its test is set aside and rewritten from the test |
+| Money, security, auth, data writes or deletes, parsers, concurrency, bug fixes | Strict: no production code without a failing test first. Cover failure and boundary cases (invalid, expired, zero, duplicate). Code you wrote in this task before its test is discarded, not kept as a reference, and rewritten from the test. Never discard the user's or pre-existing code, and never use stash or checkout to do it |
 | Ordinary logic (a branch, a loop, a calculation) | Test first, one good test per behaviour |
+| Refactoring (no behaviour change) | Existing tests pass before and after; if none cover the code, add them first |
 | Config, generated code, copy changes, throwaway prototypes | No new test needed; say so in the reply |
 
-The user can relax or tighten this. When unsure, use the stricter row.
+The user can relax or tighten this. If a change fits two rows (auth config, a data migration), the stricter row wins.
 
 ## Before the first test: pick the seam
 
 A **seam** is the public interface where you observe behaviour without reaching inside: a function's signature, a module's exports, an HTTP endpoint, a CLI command. Tests live at seams, never against internals.
 
 - Prefer an existing seam over a new one, and the highest seam that still runs fast.
-- For non-trivial work, name the seams you plan to test, with one line on what each catches and misses, and confirm them with the user if they are around. Proceed with your choice if they are not.
+- Skip this if the task or an approved plan already fixes the seams. Otherwise, if choosing the seam is a real judgement call, name the seams with one line on what each catches and misses, and ask alongside any other open questions. In an unattended run, choose, and record the choice in the reply.
 - Reuse the project's test runner, folder layout and helpers. Find them before writing anything.
 
 ## The loop, one vertical slice at a time
 
 1. **Red.** Write one test for one behaviour, named for what it proves ("rejects an expired token"). Before writing it, name the production change that would make it fail.
-2. **Watch it fail.** Run it. It must fail because the behaviour is missing, not because of a typo or import error. If it passes, it tests existing behaviour: fix the test.
+2. **Watch it fail.** Run it. It must fail because the behaviour is missing, not because of a typo or import error. If it passes, it tests existing behaviour: fix the test. When adding tests to code that already exists, prove the test can fail instead: break the line it guards, see red, then revert that change.
 3. **Green.** Write the simplest code that passes. Nothing for future tests.
-4. **Watch it pass.** Run it and the related suite. The output is clean: no new warnings or errors.
+4. **Watch it pass.** Run it and the relevant suite. The output is clean: no new warnings or errors.
 5. **Tidy.** Refactor only the code you just wrote, and only while the tests stay green.
 6. **Next slice.** Let what this slice taught you shape the next test.
 
@@ -43,7 +44,9 @@ Writing all the tests first and all the code after (horizontal slicing) tests im
 - **Verifies through the interface.** "createUser then getUser returns Alice", not "createUser then query the users table".
 - **One behaviour per test.** An "and" in the name means two tests.
 - **Mocks only at system boundaries:** external APIs, time, randomness, sometimes the database or filesystem. Never mock your own modules or internal collaborators; pass dependencies in so the boundary is easy to replace.
-- **Assert on real results, not on mock calls.** "Payment status is confirmed", not "paymentService.process was called once".
+- **Assert on real results, not on mock calls.** "Payment status is confirmed", not "paymentService.process was called once", unless the call to the boundary is itself the behaviour (retries, an email sent, the amount charged).
+- **Mock the full real data shape**: partial mocks pass while the real integration breaks.
+- **Test your behaviour**, not the framework, and not a constant's value (test what depends on it). Test-only helpers stay out of production code.
 
 ## When a test is hard to write
 
@@ -52,7 +55,7 @@ That is design feedback: the interface is hard to use. Simplify the interface (f
 ## Done means
 
 - Every new behaviour has a test you watched fail and then pass.
-- The full relevant suite passes, run fresh, with the command and result shown.
+- The relevant suite passes, run fresh (see `evidence-before-done`), with the command and result shown. Report every failure it shows, including ones you didn't cause.
 - Anything you chose not to test is listed with a reason.
 
 ## Red flags

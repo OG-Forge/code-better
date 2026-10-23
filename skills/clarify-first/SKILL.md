@@ -11,13 +11,16 @@ Find out what the user actually wants, and why, before building. Clear tasks ski
 
 - **Everything that matters is in the request** ("rename this field", "make the button blue"): don't use this skill. Do the task.
 - **Something non-trivial is open:** run the steps below.
-- If the user did not ask for questions, end your first message with a one-line offer: "Or say 'go' and I'll proceed with the recommended answers." If they take it, state your choices in one line each and start.
+- **They asked to be grilled on an existing plan:** run step 2 only. When the frontier is empty, play back the settled decisions and ask whether you've understood. Steps 3 and 4 apply only if they then want it built.
+- If the user did not ask for questions, end your first message with a one-line offer: "Or say 'go' and I'll proceed with the recommended answers." "Go" or "just build it" counts at any point: state your remaining choices in one line each, then start (multi-step work still goes through `build-plan`).
 
 ## 1. Look before you ask
 
 Facts are your job; decisions are the user's. Before the first question, read what they pointed at and the code or material it connects to, until you can explain how things work today and what the change would touch. Never ask something the code, docs or earlier conversation already answers. When a question depends on a fact you could look up, look it up (use a subagent for a long search), and ask only the questions that don't depend on it while it runs.
 
 ## 2. Ask in rounds
+
+Open round 1 with a two-line playback: the request in your own words and what you found that bears on it. If the goal, or who it is for, is unclear, that is the first question: knowing why lets you make the decisions nobody mentions the way the user would.
 
 Map the open decisions as a tree: some decisions only make sense once others are settled. The **frontier** is every open decision whose prerequisites are settled.
 
@@ -36,13 +39,13 @@ Each round, ask the whole frontier at once, numbered, each with your recommended
 
 ## 3. Lay out the approaches
 
-Once you know what they want, put the ways to build it in a message of its own: two or three real options grounded in the existing code, what each one trades off, and which one you recommend and why. If only one sensible way exists, say so and say why the others don't fit.
+Once you know what they want, ask the approach as one more round, in the same format: **Q. Approach.** two or three real options grounded in the existing code, what each trades off → Recommended: X, because... If only one sensible way exists, skip the question and say why in the write-up.
 
 ## 4. Write it down and get a yes
 
 Size the write-up to the work:
 
-- **Small change:** a short note in chat: what will be built, the chosen approach, what is out of scope.
+- **Small change:** a short note in chat: what will be built, the chosen approach, what is out of scope. It can go in the same message as the last round of questions; the user's yes to that message is the approval.
 - **Bigger piece of work:** a short design doc: goal and why; goals and non-goals; constraints; the chosen approach and the rejected ones; decisions made, marking the ones that were your call; what is left to the implementer. Save it where the project keeps docs, or ask where.
 
 Anything you filled in yourself is marked as your proposal, not as something they agreed to. Build nothing (no code, scaffolding or dependency installs) until the user approves the note or doc. Reading and exploring are fine. A throwaway spike they said yes to is fine, and keeping it is a new request.

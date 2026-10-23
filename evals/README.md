@@ -14,7 +14,7 @@ claude --plugin-dir /path/to/code-better
 Or headless, one prompt at a time:
 
 ```bash
-claude -p --plugin-dir /path/to/code-better "Review my last commit" --output-format stream-json --verbose | grep -o '"skill":"[^"]*"'
+claude -p --plugin-dir /path/to/code-better --max-turns 2 --output-format stream-json --verbose "Review my last commit" | grep -o '"name":"Skill","input":{"skill":"[^"]*"'
 ```
 
 A `should` prompt passes when its skill loads. A `should_not` prompt passes when that skill stays quiet.

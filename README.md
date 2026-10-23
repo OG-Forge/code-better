@@ -51,11 +51,13 @@ These skills cover the same ground as some skills in those sets, so with both in
 | evidence-before-done | verification-before-completion | — |
 | ship-review | requesting-code-review | code-review |
 | review-feedback | receiving-code-review | — |
-| build-plan | writing-plans, executing-plans | to-spec, to-tickets, implement |
+| build-plan | writing-plans, executing-plans, subagent-driven-development | to-spec, to-tickets, implement |
 | session-handoff | — | handoff |
-| session-retro | — | retro |
+| session-retro | diagnosing-superpowers | retro |
 
-Superpowers' session-start hook tells the agent to load a Superpowers skill whenever one might apply. If you want Code Better's versions, disable the Superpowers plugin (`/plugin` → Installed → superpowers → Disable) or uninstall it. The skills that have no counterpart there (`lean-coding`, `metric-loop`, `keepwarm`) combine with anything.
+Superpowers' session-start hook tells the agent to load a Superpowers skill whenever one might apply. If you want Code Better's versions, disable the Superpowers plugin (`/plugin` → Installed → superpowers → Disable) or uninstall it. The skills that have no counterpart there (`metric-loop`, `keepwarm`) combine with anything. `lean-coding` covers the same rules as ponytail and the Karpathy CLAUDE.md: if you already use either, keep one of them, not both.
+
+Claude Code also has a built-in `/code-review` command (bug-focused; it can post PR comments or apply fixes), plus `/security-review` and `/simplify`. Typing `/code-review` runs the built-in. `ship-review` loads on plain-language requests ("review my last commit") and adds reading past the diff, load and scale, lean, spec and scope checks, and plain-English findings. Use one per review.
 
 Worth installing as well, from their own repos: Superpowers' `writing-skills` and Matt Pocock's `writing-for-agents` if you write your own skills; Pocock's `codebase-design` for deep-module design; awesome-llm-apps' [`scope-creep-detector`](https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/scope-creep-detector) and [`commit-archaeologist`](https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/commit-archaeologist) for script-backed diff and history checks.
 

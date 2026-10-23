@@ -1,51 +1,140 @@
 {
   "_about": "For each skill: prompts that should load it and near-misses that should not. Used by reviewers and for manual or headless trigger checks (see evals/README.md).",
   "lean-coding": {
-    "should": ["Add a function that formats prices in rupees", "Refactor the auth middleware to support API keys", "This PR is way over-engineered, simplify it"],
-    "should_not": ["What does this regex do?", "Write a cover letter for me"]
+    "should": [
+      "Add a function that formats prices in rupees",
+      "Refactor the auth middleware to support API keys",
+      "This PR is way over-engineered, simplify it"
+    ],
+    "should_not": [
+      "What does this regex do?",
+      "Write a cover letter for me"
+    ]
   },
   "clarify-first": {
-    "should": ["Build me a dashboard for our sales data", "Grill me on this plan before we start", "Add user roles to the app"],
-    "should_not": ["Rename getUser to fetchUser everywhere", "Make the submit button blue"]
+    "should": [
+      "Build me a dashboard for our sales data",
+      "Grill me on this plan before we start",
+      "Add user roles to the app"
+    ],
+    "should_not": [
+      "Rename getUser to fetchUser everywhere",
+      "Make the submit button blue",
+      "Fix the bug where sessions expire after 5 minutes"
+    ]
   },
   "test-first": {
-    "should": ["Implement the discount calculation from the spec", "Use TDD to add retry logic to the HTTP client", "Are these tests any good? They mock everything"],
-    "should_not": ["Update the README install section", "Bump the eslint version"]
+    "should": [
+      "Implement the discount calculation from the spec",
+      "Use TDD to add retry logic to the HTTP client",
+      "Are these tests any good? They mock everything",
+      "Add unit tests for the existing parser"
+    ],
+    "should_not": [
+      "Update the README install section",
+      "Bump the eslint version"
+    ]
   },
   "feedback-loop-debugging": {
-    "should": ["The checkout test started failing on CI", "Users report the export is sometimes empty", "Why is this endpoint 10x slower since last week?"],
-    "should_not": ["Add a new export format", "Explain how the export works"]
+    "should": [
+      "The checkout test started failing on CI",
+      "Users report the export is sometimes empty",
+      "Why is this endpoint 10x slower since last week?"
+    ],
+    "should_not": [
+      "Add a new export format",
+      "Explain how the export works",
+      "Make this parser faster"
+    ]
   },
   "evidence-before-done": {
-    "should": ["(agent is about to report a fix is done)", "Is it ready to merge?", "The subagent says all tests pass, open the PR"],
-    "should_not": ["What is our test command?", "Draft an outline for the plan"]
+    "should": [
+      "(agent is about to report a fix is done)",
+      "ok, commit and push it",
+      "The subagent says all tests pass, open the PR"
+    ],
+    "should_not": [
+      "What is our test command?",
+      "Draft an outline for the plan"
+    ]
   },
   "ship-review": {
-    "should": ["Review my last commit", "Is this PR ready to merge? https://github.com/org/repo/pull/12", "Audit this repo for bugs and bloat"],
-    "should_not": ["The reviewer left 6 comments, address them", "Write the code for this feature"]
+    "should": [
+      "Review my last commit",
+      "Is this PR ready to merge? https://github.com/org/repo/pull/12",
+      "Audit this repo for bugs and bloat",
+      "Did this PR go beyond its ticket?"
+    ],
+    "should_not": [
+      "The reviewer left 6 comments, address them",
+      "Write the code for this feature",
+      "Write a review of this library: should we adopt zod?"
+    ]
   },
   "review-feedback": {
-    "should": ["The reviewer left 6 comments on my PR, address them", "Copilot review says to add caching here, do it", "Fix items 1-4 from the review"],
-    "should_not": ["Review my PR", "Write a review of this library"]
+    "should": [
+      "The reviewer left 6 comments on my PR, address them",
+      "Copilot review says to add caching here, do it",
+      "Fix items 1-4 from the review"
+    ],
+    "should_not": [
+      "Review my PR",
+      "Write a review of this library"
+    ]
   },
   "build-plan": {
-    "should": ["Here's the approved design, write the implementation plan", "Migrate the app from REST to GraphQL", "Execute the plan in docs/plans/2026-10-24-billing.md"],
-    "should_not": ["Fix the typo in the footer", "What's the plan for lunch?"]
+    "should": [
+      "Here's the approved design, write the implementation plan",
+      "Migrate the app from REST to GraphQL",
+      "Execute the plan in docs/plans/2026-10-24-billing.md"
+    ],
+    "should_not": [
+      "Fix the typo in the footer",
+      "What's the plan for lunch?"
+    ]
   },
   "session-handoff": {
-    "should": ["Write a handoff so I can continue on my other laptop", "Context is almost full, set up the next session", "Summarise this for a fresh agent"],
-    "should_not": ["Summarise this article", "Write release notes"]
+    "should": [
+      "Write a handoff so I can continue on my other laptop",
+      "Context is almost full, set up the next session",
+      "Summarise this for a fresh agent"
+    ],
+    "should_not": [
+      "Summarise this article",
+      "Write release notes",
+      "Write a PR description for reviewers"
+    ]
   },
   "session-retro": {
-    "should": ["Do a retro on this session", "Why did yesterday's agent session take 3 hours?", "Look at my last sessions and improve our CLAUDE.md"],
-    "should_not": ["Write a sprint retrospective doc for the team", "Review this PR"]
+    "should": [
+      "Do a retro on this session",
+      "Why did yesterday's agent session take 3 hours?",
+      "Look at my last sessions and improve our CLAUDE.md"
+    ],
+    "should_not": [
+      "Write a sprint retrospective doc for the team",
+      "Review this PR"
+    ]
   },
   "metric-loop": {
-    "should": ["Run experiments overnight to cut the bundle size", "Keep trying optimisations until p95 latency drops", "Autoresearch-style loop on our prompt eval score"],
-    "should_not": ["Make this function faster", "Run the benchmark once"]
+    "should": [
+      "Run experiments overnight to cut the bundle size",
+      "Keep trying optimisations until p95 latency drops",
+      "Autoresearch-style loop on our prompt eval score"
+    ],
+    "should_not": [
+      "Make this function faster",
+      "Run the benchmark once"
+    ]
   },
   "keepwarm": {
-    "should": ["/keepwarm 3h", "I'm stepping away for a couple of hours, keep the session warm"],
-    "should_not": ["Keep the server running", "Warm up the cache in our Redis"]
+    "should": [
+      "/keepwarm 3h",
+      "I'm stepping away for a couple of hours, keep the session warm"
+    ],
+    "should_not": [
+      "Keep the server running",
+      "Warm up the cache in our Redis"
+    ]
   }
 }

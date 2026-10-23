@@ -1,6 +1,6 @@
 ---
 name: feedback-loop-debugging
-description: Use when something is broken, throwing, failing, flaky, slow or behaving unexpectedly (a bug report, a failing test or CI job, a regression, a production error), and before proposing any fix for it.
+description: Use when something is broken, throwing, failing, flaky, slower than before or than expected, or behaving unexpectedly (a bug report, a failing test or CI job, a regression, a production error), and before proposing any fix for it.
 ---
 
 # Feedback-loop debugging
@@ -9,7 +9,11 @@ No fix before a cause, and no cause before a loop that shows the bug. With a fas
 
 ## Safety first
 
-Redact every secret in what you show: write `<REDACTED>`. Read credentials from environment variables in any script you build. Quote only the log lines that carry the signal. Do not change shared or production systems to debug without asking.
+Redact every secret in what you show: write `<REDACTED>`. Read credentials from environment variables in any script you build. Quote only the log lines that carry the signal. When you add logging, log the presence, type or length of secrets and personal data, never their values (CI logs can be public). Do not change shared or production systems to debug without asking.
+
+## Start here: read the error
+
+Read the whole error message and stack trace. If it points to a cause you can confirm by looking (a typo, a wrong import, a missing null check at the reported line), the failing test, command or CI step is already your loop: run it once, fix, re-run it, and skip Phases 2 to 4. Go back to the full process as soon as that fix fails or the cause isn't where the trace points.
 
 ## Phase 1: build a loop that goes red
 
@@ -19,19 +23,21 @@ Find the cheapest way to trigger the bug on demand. Try, roughly in this order:
 2. A curl or HTTP script against a running dev server.
 3. A CLI call with a fixture input, diffed against known-good output.
 4. A headless browser script (Playwright or similar) that asserts on the DOM, console or network.
-5. Replaying a captured request, payload or event log through the code path.
+5. Replaying a captured request, payload or event log through the code path, in isolation (local or test environment), never against shared or production systems.
 6. A throwaway harness: the smallest slice of the system that runs the failing path.
 7. A fuzz or property loop for "sometimes wrong" bugs.
-8. A bisect script (`git bisect run`) when the bug appeared between two known states.
+8. A bisect script (`git bisect run`) when the bug appeared between two known states. Use a clean tree or a separate worktree, make sure the script touches no shared data, and finish with `git bisect reset`.
 9. A differential run: old version against new, or two configs, diffing the output.
 10. Last resort: a step-by-step script that asks a human to do the part only they can, and captures the result.
+
+Check what changed recently (`git log`, recent diffs, dependency bumps, config and environment differences, and for CI-only failures the CI environment, versions and test order): it often tells you how to trigger the bug.
 
 Then tighten it: faster (skip unrelated setup), sharper (assert the exact symptom, not "didn't crash") and deterministic (pin time, seed randomness, isolate files and network). For flaky bugs, raise the reproduction rate (loop it 100×, add load, narrow timing) until it fails often enough to work with.
 
 **Phase 1 is done** when you have one command, already run and shown, that:
 - exercises the real code path and asserts the user's exact symptom,
 - gives the same verdict every run (or a pinned, high failure rate for flaky bugs),
-- runs in seconds and needs no human.
+- runs in seconds and needs no human (except through the step-by-step script in item 10).
 
 If you catch yourself building a theory from code before this command exists, go back to building the loop. If you truly cannot build one, stop: list what you tried and ask for access to an environment where it reproduces, a redacted artifact (logs, HAR, dump, recording), or permission to add temporary instrumentation.
 
@@ -39,13 +45,13 @@ If you catch yourself building a theory from code before this command exists, go
 
 - Confirm the loop shows the failure the user described, not a nearby different one.
 - Shrink it: remove inputs, steps, config and data one at a time, re-running after each cut, until every remaining piece is needed for the failure.
-- Check what changed recently: `git log`, recent diffs, dependency bumps, config and environment differences.
 
 ## Phase 3: hypothesise
 
 - Write 3–5 ranked hypotheses before testing any. Each makes a prediction: "If X is the cause, then changing Y makes the bug go away."
 - A hypothesis without a prediction is a hunch: sharpen it or drop it.
-- Show the ranked list to the user if they are around; they often know something that reorders it. Carry on if they are not.
+- Trace the bad value backward through its callers to where it originates, and compare against similar code that works: list every difference.
+- Show the ranked list to the user in an interactive session; they often know something that reorders it. Don't wait for an answer: start on the top hypothesis. In an unattended run, record the list and carry on.
 - In a multi-part system (UI → API → service → DB, or CI → build → deploy), log what enters and leaves each boundary once, to find where the data goes wrong, before reading any one part deeply.
 
 ## Phase 4: test one hypothesis at a time
@@ -60,7 +66,7 @@ If you catch yourself building a theory from code before this command exists, go
 1. Turn the minimal repro into a failing regression test at a seam where it exercises the real bug pattern. If no such seam exists, say so: that is a design finding, not a reason for a shallow test.
 2. Watch it fail.
 3. Search for every caller of the code you are about to change. Fix the root cause once, in the shared code, not in one caller.
-4. Watch the test pass, then re-run the original Phase 1 loop and the related suite.
+4. Watch the test pass, then re-run the original Phase 1 loop and the related suite, and show the result (see `evidence-before-done`).
 
 **If three fixes have failed, stop.** Each failed fix that reveals a new problem somewhere else points to a design problem, not a missing tweak. Explain what you have learned to the user and discuss the approach before attempting a fourth.
 
@@ -68,8 +74,10 @@ If you catch yourself building a theory from code before this command exists, go
 
 - [ ] The original loop no longer reproduces the bug.
 - [ ] The regression test passes (or the missing seam is documented).
-- [ ] Every `[DEBUG-...]` line and throwaway harness is removed (search for the prefix).
+- [ ] Every `[DEBUG-...]` line and throwaway harness is removed (search for the prefix), and any bisect is ended with `git bisect reset`.
 - [ ] The cause that turned out to be right is stated in the commit or PR message.
+
+If the cause turns out to be outside the code (an external service, the environment, data), say so with the evidence, and add handling, a clear error message or monitoring for it instead of a code "fix".
 
 ## Signs you are off track
 

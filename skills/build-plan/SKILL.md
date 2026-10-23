@@ -15,7 +15,9 @@ A plan records the decisions an implementer can't make alone: which files, which
 | Several files or hours of work | A plan file using the template below |
 | Several independent parts | One plan per part, each producing working, tested software on its own |
 
-Save plan files where the project keeps docs (ask if unclear), for example `docs/plans/YYYY-MM-DD-<topic>.md`.
+Save plan files where the project keeps docs, defaulting to `docs/plans/YYYY-MM-DD-<topic>.md`.
+
+No design yet and decisions still open (scope, data, behaviour)? Use `clarify-first` before planning.
 
 ## Before writing tasks
 
@@ -66,11 +68,13 @@ Fix what you find. Then ask the user to review the plan before building, unless 
 
 ## Carrying out a plan
 
+- Before task 1, work on a branch (or worktree), not the default branch, unless the user said otherwise.
 - Work the tasks in order, ticking each box only after its check has run (see `evidence-before-done`), and commit per task.
-- **Rulings, not stalls.** When the plan is ambiguous or wrong in a small way, decide, note it in the plan as `Ruling: <decision> - <why> - <cost if wrong>`, and keep going.
+- After a context reset or in a new session, trust the ticked boxes and `git log`; don't redo ticked tasks.
+- **Rulings, not stalls.** When the plan is ambiguous or wrong in a small way, decide, note it in the plan as `Ruling: <decision> - <why> - <cost if wrong>`, and keep going. The spec outranks the plan.
 - **Stop and ask only for:** something irreversible or destructive; a security-sensitive action; a side effect outside the working copy that needs permission (pushing to a shared branch, merging, deploying, publishing, messaging people); or a plan so broken that every way forward is a guess.
-- When subagents are available and tasks are independent, give each task to a fresh subagent with just that task, the interfaces it needs and the commands. Check its diff and run the tests yourself before ticking the task. Choose the model tier deliberately: a cheap model for mechanical tasks, the strongest for design work and the final review.
-- At the end, have the whole change reviewed with fresh eyes (`ship-review`, ideally by a fresh subagent), fix what it finds, run the full suite, and report.
+- When subagents are available, you can give each task, one at a time, to a fresh subagent with just that task, the interfaces it needs and the commands. Run parallel implementers only when each has its own worktree; in one working copy they clash. Check each diff and run the tests yourself before ticking the task. If a task fails your check twice, take it over yourself or log a Ruling and move on. Choose the model tier deliberately: a cheap model for mechanical tasks, the strongest for design work and the final review.
+- At the end, have the whole change reviewed with fresh eyes (`ship-review`, ideally by a fresh subagent). Fix the serious findings in one pass, each with a test that fails first; list minor ones in the report instead of fixing them. Run the full suite, then report, listing every `Ruling:` with its cost if wrong (the report is the only place those decisions reach the user).
 
 ---
 Adapted from [obra/superpowers](https://github.com/obra/superpowers) `writing-plans`, `executing-plans` and `subagent-driven-development` (MIT), and the step-to-verify list from [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) (MIT). See CREDITS.md.
