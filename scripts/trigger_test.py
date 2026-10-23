@@ -4,9 +4,11 @@ Usage: python scripts/trigger_test.py [skill ...]
 Needs the `claude` CLI on PATH and spends tokens (one short session per prompt).
 Prompts written in parentheses describe a moment, not a user message, and are skipped, as are slash
 commands (they expand as a prompt, not a Skill call). Disable other skill plugins first: results reflect
-every plugin that is enabled.
+every plugin that is enabled. To switch plugins off for this run only, set TRIGGER_SETTINGS to a
+settings JSON, e.g. '{"enabledPlugins": {"superpowers@claude-plugins-official": false}}'.
 """
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -19,11 +21,15 @@ SKILL_CALL = re.compile(r'"name":"Skill","input":\{"skill":"([^"]+)"')
 
 
 def skills_loaded(prompt, workdir):
-    out = subprocess.run(
-        [shutil.which("claude") or "claude", "-p", "--plugin-dir", str(ROOT), "--max-turns", "2",
-         "--output-format", "stream-json", "--verbose", prompt],
-        cwd=workdir, capture_output=True, text=True, encoding="utf-8", timeout=300,
-    ).stdout
+    cmd = [shutil.which("claude") or "claude", "-p", "--plugin-dir", str(ROOT), "--max-turns", "2",
+           "--output-format", "stream-json", "--verbose"]
+    if os.environ.get("TRIGGER_SETTINGS"):
+        cmd += ["--settings", os.environ["TRIGGER_SETTINGS"]]
+    try:
+        out = subprocess.run(cmd + [prompt], cwd=workdir, capture_output=True, text=True, stdin=subprocess.DEVNULL,
+                             encoding="utf-8", timeout=180).stdout
+    except subprocess.TimeoutExpired as e:
+        out = e.stdout.decode("utf-8", "replace") if isinstance(e.stdout, bytes) else (e.stdout or "")
     return SKILL_CALL.findall(out)
 
 
