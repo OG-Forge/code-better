@@ -1,0 +1,10 @@
+{
+  "name": "code-better",
+  "version": "0.1.0",
+  "description": "Skills that make coding agents write less code, clarify before building, test and debug with real feedback loops, review like the person who gets paged, and prove work is done before saying so.",
+  "author": {"name": "Ojas Goel"},
+  "homepage": "https://github.com/OG-Forge/code-better",
+  "repository": "https://github.com/OG-Forge/code-better",
+  "license": "MIT",
+  "keywords": ["skills", "coding-agent", "tdd", "debugging", "code-review", "planning", "simplicity", "verification"]
+}

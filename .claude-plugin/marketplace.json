@@ -1,0 +1,12 @@
+{
+  "name": "code-better",
+  "owner": {"name": "OG Forge"},
+  "description": "Code Better skills from OG Forge.",
+  "plugins": [
+    {
+      "name": "code-better",
+      "source": "./",
+      "description": "Skills that make coding agents write less code, clarify before building, test and debug with real feedback loops, review like the person who gets paged, and prove work is done before saying so."
+    }
+  ]
+}
