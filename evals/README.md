@@ -1,7 +1,7 @@
 # Evals
 
 - `trigger-cases.json`: for every skill, prompts that should load it and near-misses that should not. Update it whenever a skill's `description` changes.
-- `python scripts/validate.py`: structural checks (frontmatter, name matches folder, description starts with "Use when", size under 20 KB, credit line, README link, trigger cases present). CI runs it.
+- `python scripts/validate.py`: structural checks (frontmatter, name matches folder, description starts with "Use when", size under 20 KB, credit line, README link, listed in `hooks/routing.md`, trigger cases present). CI runs it.
 
 ## Checking triggers by hand
 

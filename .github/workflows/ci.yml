@@ -14,4 +14,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: python scripts/validate.py
-      - run: python -m json.tool .claude-plugin/plugin.json > /dev/null && python -m json.tool .claude-plugin/marketplace.json > /dev/null
+      - run: python -m json.tool .claude-plugin/plugin.json > /dev/null && python -m json.tool .claude-plugin/marketplace.json > /dev/null && python -m json.tool hooks/hooks.json > /dev/null

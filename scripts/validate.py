@@ -25,6 +25,8 @@ def main():
     errors = []
     cases = json.loads((ROOT / "evals" / "trigger-cases.json").read_text(encoding="utf-8"))
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    routing = (ROOT / "hooks" / "routing.md").read_text(encoding="utf-8")
+    routed = set(re.findall(r"^- .+: code-better:([a-z0-9-]+)\s*$", routing, re.M))
     skill_dirs = sorted(p for p in (ROOT / "skills").iterdir() if p.is_dir())
     for d in skill_dirs:
         path = d / "SKILL.md"
@@ -50,11 +52,15 @@ def main():
             errors.append(f"{d.name}: no credit line pointing to CREDITS.md")
         if d.name not in cases:
             errors.append(f"{d.name}: no entry in evals/trigger-cases.json")
+        if d.name != "keepwarm" and d.name not in routed:
+            errors.append(f"{d.name}: not listed in hooks/routing.md")
         if f"skills/{d.name}/SKILL.md" not in readme:
             errors.append(f"{d.name}: not linked from README.md")
     for name in cases:
         if name != "_about" and not (ROOT / "skills" / name).is_dir():
             errors.append(f"trigger-cases.json lists unknown skill '{name}'")
+    for name in routed - {d.name for d in skill_dirs}:
+        errors.append(f"hooks/routing.md lists unknown skill '{name}'")
     for e in errors:
         print("FAIL", e)
     print(f"{len(skill_dirs)} skills checked, {len(errors)} problems")

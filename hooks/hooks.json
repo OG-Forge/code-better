@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ \"$CODE_BETTER_NO_ROUTER\" = 1 ] || cat \"${CLAUDE_PLUGIN_ROOT}/hooks/routing.md\"",
+            "shell": "bash"
+          }
+        ]
+      }
+    ]
+  }
+}

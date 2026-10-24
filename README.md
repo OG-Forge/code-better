@@ -2,7 +2,7 @@
 
 Skills that make coding agents write less code, clarify before building, test and debug with real feedback loops, review like the person who gets paged, and prove work is done before saying so.
 
-Each skill merges the strongest parts of popular public skill sets: [obra/superpowers](https://github.com/obra/superpowers), [mattpocock/skills](https://github.com/mattpocock/skills), [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), the [Karpathy-inspired guidelines](https://github.com/multica-ai/andrej-karpathy-skills) and [karpathy/autoresearch](https://github.com/karpathy/autoresearch). Where those sets disagree (strict TDD versus proportional testing, one question at a time versus batched rounds, mandatory process versus "just do it"), these skills pick a middle path and say why. Every skill is a plain `SKILL.md` with no scripts or hooks, so it is easy to read before you install it.
+Each skill merges the strongest parts of popular public skill sets: [obra/superpowers](https://github.com/obra/superpowers), [mattpocock/skills](https://github.com/mattpocock/skills), [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), the [Karpathy-inspired guidelines](https://github.com/multica-ai/andrej-karpathy-skills) and [karpathy/autoresearch](https://github.com/karpathy/autoresearch). Where those sets disagree (strict TDD versus proportional testing, one question at a time versus batched rounds, mandatory process versus "just do it"), these skills pick a middle path and say why. Every skill is a plain `SKILL.md` with no scripts, so it is easy to read before you install it. The plugin's only hook prints a short routing note at session start (see below).
 
 ## Skills
 
@@ -39,6 +39,12 @@ Skills then appear as `code-better:<name>`. To try it without installing: `claud
 
 **Other agents** (Codex, Cursor, Copilot, Gemini CLI, OpenCode and others that read `SKILL.md`): copy the skill folders you want into that agent's skills folder, for example `.agents/skills/` in a repo or `~/.agents/skills/` (Codex and others), or `~/.cursor/skills/`. `keepwarm` works only in Claude Code; the rest are tool-neutral.
 
+## The routing note
+
+In testing, agents loaded skills on their own mostly when a prompt named the workflow ("do a retro", "write a handoff"). For everyday requests ("review my last commit", "the CI test is failing") they often skipped the skill and just started. So the plugin adds one `SessionStart` hook that prints [hooks/routing.md](hooks/routing.md): under 200 words mapping kinds of task to skills, with a nudge to load at most two per task. Measured with `scripts/trigger_test.py` (headless, Superpowers off, one run each): across the 34 should-load prompts for the 11 skills in both runs, the right skill loaded 12 times without the note and 17 times with it, and none of the 26 near-miss prompts loaded the wrong skill in either run. Treat these as rough. Results vary from run to run (one skill went from 0/3 to 3/3 between identical runs), and prompts that don't name a workflow ("add user roles", "migrate to GraphQL") still often go without a skill.
+
+To turn the note off, set the environment variable `CODE_BETTER_NO_ROUTER=1`. The hook runs under bash, so on Windows it needs Git Bash (the same as Superpowers' hook). For other agents, paste the note into your `AGENTS.md` without the `code-better:` prefixes, or leave it out.
+
 ## Using alongside Superpowers or Matt Pocock's skills
 
 These skills cover the same ground as some skills in those sets, so with both installed the agent may load two skills for the same job. Pick one per job:
@@ -56,7 +62,7 @@ These skills cover the same ground as some skills in those sets, so with both in
 | session-handoff | — | handoff |
 | session-retro | diagnosing-superpowers | retro |
 
-Superpowers' session-start hook tells the agent to load a Superpowers skill whenever one might apply. If you want Code Better's versions, disable the Superpowers plugin (`/plugin` → Installed → superpowers → Disable) or uninstall it. The skills that have no counterpart there (`metric-loop`, `keepwarm`) combine with anything. `lean-coding` covers the same rules as ponytail and the Karpathy CLAUDE.md: if you already use either, keep one of them, not both.
+Superpowers' session-start hook tells the agent to load a Superpowers skill whenever one might apply, and Code Better's routing note points at its own skills, so with both enabled the agent gets two competing routers. If you want Code Better's versions, disable the Superpowers plugin (`/plugin` → Installed → superpowers → Disable) or uninstall it. The skills that have no counterpart there (`metric-loop`, `keepwarm`) combine with anything. `lean-coding` covers the same rules as ponytail and the Karpathy CLAUDE.md: if you already use either, keep one of them, not both.
 
 Claude Code also has a built-in `/code-review` command (bug-focused; it can post PR comments or apply fixes), plus `/security-review` and `/simplify`. Typing `/code-review` runs the built-in. `ship-review` loads on plain-language requests ("review my last commit") and adds reading past the diff, load and scale, lean, spec and scope checks, and plain-English findings. Use one per review.
 
