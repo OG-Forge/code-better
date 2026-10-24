@@ -19,6 +19,7 @@ Each skill merges the strongest parts of popular public skill sets: [obra/superp
 | [session-handoff](skills/session-handoff/SKILL.md) | Moving work to a new session, tool or person | When to continue, clear, compact or hand off, plus a fixed handoff template |
 | [session-retro](skills/session-retro/SKILL.md) | You ask why a session went badly or how to improve the setup | Mines session logs; turns mistakes into checks, pointers and instruction-file fixes |
 | [metric-loop](skills/metric-loop/SKILL.md) | You want an unattended loop to improve one number | Modify, measure, keep or revert, log; read-only evaluator, noise threshold, budget, guardrails |
+| [harness-setup](skills/harness-setup/SKILL.md) | Setting up or overhauling an agent harness (instructions, skills, subagents, hooks, permissions, MCP) | Recon first, then grills the goal; strongly opposes setups that will hurt (giant CLAUDE.md, persona swarms, skipped permissions, MCP for what a CLI does) and offers better options; builds a minimal v1 and proves each piece works |
 | [keepwarm](skills/keepwarm/SKILL.md) | `/keepwarm 3h`, or "I'm stepping away" | Keeps a long Claude Code session's prompt cache warm while you're away |
 
 The skills reference each other where they meet. For example, `clarify-first` hands an approved design to `build-plan`, and `build-plan` ticks tasks only after `evidence-before-done`.
@@ -36,7 +37,7 @@ The skills reference each other where they meet. For example, `clarify-first` ha
 
 Skills then appear as `code-better:<name>`. To try it without installing: `claude --plugin-dir /path/to/code-better`.
 
-**Other agents** (Codex, Cursor, Copilot, Gemini CLI, OpenCode and others that read `SKILL.md`): copy the skill folders you want into that agent's skills folder, for example `~/.codex/skills/`, `~/.cursor/skills/`, or `.agents/skills/` in a repo. `keepwarm` works only in Claude Code; the rest are tool-neutral.
+**Other agents** (Codex, Cursor, Copilot, Gemini CLI, OpenCode and others that read `SKILL.md`): copy the skill folders you want into that agent's skills folder, for example `.agents/skills/` in a repo or `~/.agents/skills/` (Codex and others), or `~/.cursor/skills/`. `keepwarm` works only in Claude Code; the rest are tool-neutral.
 
 ## Using alongside Superpowers or Matt Pocock's skills
 
@@ -58,6 +59,8 @@ These skills cover the same ground as some skills in those sets, so with both in
 Superpowers' session-start hook tells the agent to load a Superpowers skill whenever one might apply. If you want Code Better's versions, disable the Superpowers plugin (`/plugin` → Installed → superpowers → Disable) or uninstall it. The skills that have no counterpart there (`metric-loop`, `keepwarm`) combine with anything. `lean-coding` covers the same rules as ponytail and the Karpathy CLAUDE.md: if you already use either, keep one of them, not both.
 
 Claude Code also has a built-in `/code-review` command (bug-focused; it can post PR comments or apply fixes), plus `/security-review` and `/simplify`. Typing `/code-review` runs the built-in. `ship-review` loads on plain-language requests ("review my last commit") and adds reading past the diff, load and scale, lean, spec and scope checks, and plain-English findings. Use one per review.
+
+`harness-setup` overlaps with the `claude-code-setup` plugin's `claude-automation-recommender`, which reads the repo and lists recommendations without building anything. `harness-setup` starts from your goal, pushes back on bad choices, builds the setup and proves each piece works. Keep one enabled if both trigger on "set up Claude Code for this project".
 
 Worth installing as well, from their own repos: Superpowers' `writing-skills` and Matt Pocock's `writing-for-agents` if you write your own skills; Pocock's `codebase-design` for deep-module design; awesome-llm-apps' [`scope-creep-detector`](https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/scope-creep-detector) and [`commit-archaeologist`](https://github.com/Shubhamsaboo/awesome-llm-apps/tree/main/agent_skills/commit-archaeologist) for script-backed diff and history checks.
 

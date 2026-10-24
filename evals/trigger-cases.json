@@ -136,5 +136,18 @@
       "Keep the server running",
       "Warm up the cache in our Redis"
     ]
+  },
+  "harness-setup": {
+    "should": [
+      "Help me set up Claude Code for this repo",
+      "I want a team of 8 subagents to build my app, set it up",
+      "Our CLAUDE.md is 900 lines and the agent ignores it, fix our setup",
+      "Configure Codex and Cursor for our monorepo"
+    ],
+    "should_not": [
+      "Set up a Python virtual environment",
+      "Configure ESLint for this project",
+      "Write a test harness for the payment module"
+    ]
   }
 }

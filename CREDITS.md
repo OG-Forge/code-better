@@ -15,6 +15,7 @@ The skills in this repository are adaptations: the text has been rewritten, merg
 | session-handoff | mattpocock/skills `handoff`, `ask-matt` (phase boundaries) |
 | session-retro | mattpocock/skills `retro`; superpowers `diagnosing-superpowers` (log-reading safety) |
 | metric-loop | karpathy/autoresearch `program.md` |
+| harness-setup | original; applies ideas from mattpocock/skills `retro` and `writing-for-agents` |
 | keepwarm | original (Ojas Goel) |
 
 `ship-review`'s scope check takes its idea from the `scope-creep-detector` skill in [Shubhamsaboo/awesome-llm-apps](https://github.com/Shubhamsaboo/awesome-llm-apps) (Apache-2.0, by Matt Van Horn). No text or code from that project is included.
